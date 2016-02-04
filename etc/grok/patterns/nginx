@@ -1,5 +1,8 @@
 # Nginx
 NGUSERNAME [a-zA-Z\.\@\-\+_%]+
 NGUSER %{NGUSERNAME}
-NGINXACCESS %{COMBINEDAPACHELOG}+%{GREEDYDATA:extra_fields}
-NGINXERROR (?<timestamp>%{YEAR}[./-]%{MONTHNUM}[./-]%{MONTHDAY}[- ]%{TIME}) \[%{LOGLEVEL:severity}\] %{POSINT:pid}#%{NUMBER}: %{GREEDYDATA:errormessage}(?:, client: (?<client>%{IP}|%{HOSTNAME}))(?:, server: %{IPORHOST:server})(?:, request: %{QS:request})?(?:, upstream: \"%{URI:upstream}\")?(?:, host: %{QS:host})?(?:, referrer: \"%{URI:referrer}\")
+NGFASTCGISOCK (?:fastcgi://unix:%{UNIXPATH})
+NGUPSTREAM (?:%{URI}|%{NGFASTCGISOCK})
+
+NGINXACCESS %{COMBINEDAPACHELOG}(?:, host: %{QS:host})?+%{GREEDYDATA:extra_fields}
+NGINXERROR (?<timestamp>%{YEAR}[./-]%{MONTHNUM}[./-]%{MONTHDAY}[- ]%{TIME}) \[%{LOGLEVEL:severity}\] %{POSINT:pid}#%{NUMBER}: %{GREEDYDATA:errormessage}(?:, client: (?<client>%{IP}|%{HOSTNAME}))(?:, server: %{IPORHOST:server})(?:, request: %{QS:request})?(?:, upstream: \"%{NGUPSTREAM:upstream}\")?(?:, host: %{QS:host})?(?:, referrer: \"%{URI:referrer}\")?
