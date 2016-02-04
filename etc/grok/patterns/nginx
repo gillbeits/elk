@@ -4,5 +4,5 @@ NGUSER %{NGUSERNAME}
 NGFASTCGISOCK (?:fastcgi://unix:%{UNIXPATH})
 NGUPSTREAM (?:%{URI}|%{NGFASTCGISOCK})
 
-NGINXACCESS %{COMBINEDAPACHELOG}(?:, host: %{HOSTNAME:hostname})?+%{GREEDYDATA:extra_fields}
+NGINXACCESS %{COMBINEDAPACHELOG}(?:, host: \"%{HOSTNAME:hostname}\")?+%{GREEDYDATA:extra_fields}
 NGINXERROR (?<timestamp>%{YEAR}[./-]%{MONTHNUM}[./-]%{MONTHDAY}[- ]%{TIME}) \[%{LOGLEVEL:severity}\] %{POSINT:pid}#%{NUMBER}: %{GREEDYDATA:errormessage}(?:, client: (?<client>%{IP}|%{HOSTNAME}))(?:, server: %{IPORHOST:server})(?:, request: %{QS:request})?(?:, upstream: \"%{NGUPSTREAM:upstream}\")?(?:, host: %{QS:host})?(?:, referrer: \"%{URI:referrer}\")?
